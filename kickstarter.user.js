@@ -8,6 +8,7 @@
 // @run-at         document-end
 // ==/UserScript==
 
+var loadnotescounter = 0;
 function loadnotesloop() {
     setTimeout(function() {
 	a = $(".backing-plus-btn:visible:not(.notespulled)");
@@ -52,10 +53,7 @@ $(document).ready(function() {
     // observer.disconnect();
     $("#collected a.show_more_backings")[0].click();
 
-    var loadnotescounter = 0;
     loadnotesloop();
 
-
     $(".backings-info__notes:not(:has(p))").each(function(j) { $("tr#backing_"+$(this).parents("div[data-backing_id]").attr("data-backing_id")).find(".backing-plus-btn:visible").removeClass("notespulled"); $(this).removeClass("notesshown"); });
-
 });
