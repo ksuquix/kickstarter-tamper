@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name           Kickstarter auto-hide completed backings
 // @namespace      https://github.com/ksuquix/kickstarter-tamper
-// @version        0.0.8
+// @version        0.0.9
 // @description    An assist so you can see the projects you haven't gotten yet.
 // @include        https://www.kickstarter.com/profile/backings?ref=user_menu
 // @require        http://code.jquery.com/jquery-1.10.2.min.js
@@ -26,7 +26,7 @@ function loadnotesloop() {
 			$('.modal_dialog_close').filter(':visible')[0].click();
 		}
 		console.log("timing loadnotesloop");
-		let a = $(".backing-plus-btn:visible:not(.notespulled)");
+		let a = $("section#collected .backing-plus-btn:visible:not(.notespulled)");
 		a.slice(0,1).each(function(b) {
 			console.log("clicking: "+$(this).parents("tr").attr("id"));
 			$(this)[0].click();
@@ -67,9 +67,10 @@ $(document).ready(function() {
 				if($("#collected a.show_more_backings").is(":hidden")) {
 					//console.log("show more hidden now");
 					if(loadnotescounter<1) {
-					console.log("triggering loadnotesloop");
-					loadnotescounter++;
-					loadnotesloop();
+						console.log("triggering loadnotesloop");
+						loadnotescounter++;
+						// grr: they broke stuff
+						//loadnotesloop();
 					}
 					return;
 				}				  
