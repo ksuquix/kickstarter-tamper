@@ -1,10 +1,10 @@
 // ==UserScript==
 // @name           Kickstarter auto-hide completed backings
 // @namespace      https://github.com/ksuquix/kickstarter-tamper
-// @version        0.0.9
+// @version        0.0.10
 // @description    An assist so you can see the projects you haven't gotten yet.
 // @include        https://www.kickstarter.com/profile/backings?ref=user_menu
-// @require        http://code.jquery.com/jquery-1.10.2.min.js
+// @require        https://code.jquery.com/jquery-latest.min.js
 // @run-at         document-end
 // ==/UserScript==
 
@@ -56,6 +56,7 @@ $(document).ready(function() {
 				console.log("new nodes");
 				$("input:checked").closest("tr").hide();
 				$(":checkbox[id^=backer_completed_at][value=true]").closest("tr").hide();
+				$('td:contains("No Reward")').closest("tr").hide();
 				$('button[data-sentiment="negative"][data-selected="true"]').closest('tr').hide();
 				$('#uncollected').hide();
 				$('td').filter(function(){return $(this).text().trim()==="done";}).parent().hide();
