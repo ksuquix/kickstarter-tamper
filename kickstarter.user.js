@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name           Kickstarter auto-hide completed backings
 // @namespace      https://github.com/ksuquix/kickstarter-tamper
-// @version        0.0.8
+// @version        0.0.12
 // @description    An assist so you can see the projects you haven't gotten yet.
 // @include        https://www.kickstarter.com/profile/backings?ref=user_menu
 // @require        http://code.jquery.com/jquery-1.10.2.min.js
@@ -42,7 +42,7 @@ function loadnotesloop() {
 		if(loadnotescounter<130) {
 			loadnotesloop();
 		} else {
-			setTimeout(closemodals(),1000);
+			setTimeout(closemodals,1000);
 		}
     }, 1000);
 }
