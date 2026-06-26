@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name           Kickstarter auto-hide completed backings
 // @namespace      https://github.com/ksuquix/kickstarter-tamper
-// @version        0.0.10
+// @version        0.0.12
 // @description    An assist so you can see the projects you haven't gotten yet.
 // @include        https://www.kickstarter.com/profile/backings?ref=user_menu
 // @require        https://code.jquery.com/jquery-latest.min.js
@@ -11,9 +11,11 @@
 function closemodals() {
 	// to make sure
 	console.log("close modals");
-	for(let i=0;i<=$('.modal_dialog_close').length;i++) {
-		if($('.modal_dialog_close').filter(':visible').length>0) {
-			$('.modal_dialog_close').filter(':visible')[0].click();
+	var closeBtns = $('.modal_dialog_close').filter(':visible');
+	for(let i=0;i<closeBtns.length;i++) {
+		if(closeBtns[i]) {
+			closeBtns[i].click();
+			closeBtns = $('.modal_dialog_close').filter(':visible');
 		}
 	}
 }
@@ -42,7 +44,7 @@ function loadnotesloop() {
 		if(loadnotescounter<130) {
 			loadnotesloop();
 		} else {
-			setTimeout(closemodals(),1000);
+			setTimeout(closemodals,1000);
 		}
     }, 1000);
 }
@@ -65,17 +67,17 @@ $(document).ready(function() {
 					console.log("still loading");
 					return;
 				}
-				if($("#collected a.show_more_backings").is(":hidden")) {
+				if($("#collected a.show_more_backings").is(":hidden") || $("#collected a.show_more_backings").length === 0) {
 					//console.log("show more hidden now");
 					if(loadnotescounter<1) {
 						console.log("triggering loadnotesloop");
 						loadnotescounter++;
-						// grr: they broke stuff
-						//loadnotesloop();
+				loadnotesloop();
 					}
 					return;
 				}				  
-				$("#collected a.show_more_backings")[0].click();
+				var btn = $("#collected a.show_more_backings")[0];
+				if (btn) btn.click();
 			}
 			$('.modal_dialog_close').filter(':visible').click();
 		});    
@@ -85,9 +87,21 @@ $(document).ready(function() {
 	childList: true, 
 	characterData: true 
     };
-    observer.observe($("#collected table")[0], config);
+    var collectedTable = $("#collected table")[0];
+    var showMoreBtn = $("#collected a.show_more_backings")[0];
+    if (collectedTable) {
+        observer.observe(collectedTable, config);
+    }
     // observer.disconnect();
-    $("#collected a.show_more_backings")[0].click();
+    if (showMoreBtn) {
+        showMoreBtn.click();
+    }
 
-    $(".backings-info__notes:not(:has(p))").each(function(j) { $("tr#backing_"+$(this).parents("div[data-backing_id]").attr("data-backing_id")).find(".backing-plus-btn:visible").removeClass("notespulled"); $(this).removeClass("notesshown"); });
+    $(".backings-info__notes:not(:has(p))").each(function(j) {
+        var backingId = $(this).parents("div[data-backing_id]").attr("data-backing_id");
+        if (backingId) {
+            $("tr#backing_"+backingId).find(".backing-plus-btn:visible").removeClass("notespulled");
+        }
+        $(this).removeClass("notesshown");
+    });
 });
